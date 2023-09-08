@@ -1,29 +1,18 @@
 {
   "users": [
     {
-      "id": 1,
-      "nome": "Arthur Oliveira",
-      "email": "aoliveira@hotmail.com"
+      "name": "Lucas",
+      "email": "teste@gmail.com",
+      "ramal": "7755",
+      "status": "",
+      "id": 6
     },
     {
-      "id": 2,
-      "nome": "Maria Julia",
-      "email": "mjds@empresa.com"
-    },
-    {
-      "name": "",
-      "email": "",
-      "id": 3
-    },
-    {
-      "name": "teste",
-      "email": "teste123444",
-      "id": 4
-    },
-    {
-      "name": "teste2",
-      "email": "teste em,ail",
-      "id": 5
+      "name": "Raphael",
+      "email": "raphaelmrodrigues@hotmail.com",
+      "ramal": "7764",
+      "status": "",
+      "id": 7
     }
   ]
 }

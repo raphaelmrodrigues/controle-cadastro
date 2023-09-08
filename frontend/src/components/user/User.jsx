@@ -10,13 +10,20 @@ const headerProps = {
 
 const baseUrl = 'http://localhost:3001/users'
 const initialState = {
-    user: { name: '', email: ''},
+    user: { name: '', email: '', ramal: '', status: ''},
     list: []
 }
 
 export default class Users extends Component {
 
     state = {...initialState}
+
+    componentWillMount() {
+        axios(baseUrl).then(resp => {
+            this.setState({list: resp.data})
+        })
+    }
+
 
     clear() {
         this.setState({user: initialState.user})
@@ -33,9 +40,9 @@ export default class Users extends Component {
             })
     }
 
-    getUpdatedList(user) {
+    getUpdatedList(user, add = true) {
         const list = this.state.list.filter(u => u.id !== user.id)
-        list.unshift(user)
+        if(add) list.unshift(user)
         return list
     }
 
@@ -70,6 +77,17 @@ export default class Users extends Component {
                                    placeholder="Digite o e-mail..."/>
                         </div>
                     </div>
+
+                    <div className="col-12 col-md-6">
+                        <div className="form-group">
+                            <label>Ramal</label>
+                            <input type="text" className="form-control"
+                                   name="ramal"
+                                   value={this.state.user.ramal}
+                                   onChange={e => this.updateField(e)}
+                                   placeholder="Digite o ramal..."/>
+                        </div>
+                    </div>
                 </div>
 
                 <hr/>
@@ -90,10 +108,65 @@ export default class Users extends Component {
         )
     }
 
+    load(user) {
+        this.setState({user})
+    }
+
+    remove(user) {
+        axios.delete(`${baseUrl}/${user.id}`).then(resp => {
+            const list = this.getUpdatedList(user, false)
+            this.setState({list})
+        })
+    }
+
+    renderTable() {
+        return (
+            <table className="table mt-4">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Ramal</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {this.renderRows()}
+                </tbody>
+            </table>
+        )
+    }
+
+    renderRows() {
+        return this.state.list.map(user => {
+            return (
+                <tr key={user.id}>
+                    <td>{user.id}</td>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>{user.ramal}</td>
+                    <td>{user.status}</td>
+                    <td>
+                       <button className="btn btn-warning"
+                           onClick={() => this.load(user)}>
+                           <i className="fa fa-pencil"></i>
+                       </button>
+                        <button className="btn btn-danger ml-2"
+                            onClick={() => this.remove(user)}>
+                            <i className="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            )
+        })
+    }
     render() {
         return (
             <Main {...headerProps}>
                 {this.renderForm()}
+                {this.renderTable()}
             </Main>
         )
     }
